@@ -42,7 +42,7 @@ export default function AuthCallbackPage() {
                 if (insertError) {
                   setError(insertError.message);
                 } else {
-                  router.replace(`/${locale}/dashboard`);
+                  router.replace(`/${locale}/dashboard/wellcome`);
                 }
               }
             } else {
