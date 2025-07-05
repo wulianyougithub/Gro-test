@@ -28,7 +28,7 @@ Ground 是一个基于 Next.js 和 Supabase 构建的企业级后台管理系统
 ## 目录结构
 
 ```
-gro-test/
+Gro-test/
 ├── src/
 │   ├── app/
 │   │   ├── [locale]/           # 多语言路由
@@ -88,8 +88,8 @@ gro-test/
 
 1. **克隆仓库**
    ```bash
-   git clone <repository-url>
-   cd gro-test
+   git clone https://github.com/wulianyougithub/Gro-test.git
+   cd Gro-test
    ```
 
 2. **安装依赖**

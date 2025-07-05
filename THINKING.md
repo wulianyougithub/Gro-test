@@ -210,10 +210,10 @@ AI Request → OpenAI API → Message Generation → Database Storage
 ## 9. Delivery
 
 ### GitHub Repository:
-[Ground AI Platform](https://github.com/your-username/gro-test)
+[Ground AI Platform](https://github.com/wulianyougithub/Gro-test.git)
 
-### Live Demo:
-[Vercel Deployment](https://your-app.vercel.app)
+<!-- ### Live Demo:
+[Vercel Deployment](https://your-app.vercel.app) -->
 
 ### Documentation:
 - [README.md](./README.md) - Project overview and setup

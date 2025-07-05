@@ -209,10 +209,10 @@ AI 请求 → OpenAI API → 消息生成 → 数据库存储
 ## 9. 交付
 
 ### GitHub 仓库:
-[Ground AI 平台](https://github.com/your-username/gro-test)
+[Ground AI 平台](https://github.com/wulianyougithub/Gro-test.git)
 
-### 在线演示:
-[Vercel 部署](https://your-app.vercel.app)
+<!-- ### 在线演示:
+[Vercel 部署](https://your-app.vercel.app) -->
 
 ### 文档:
 - [README.md](./README.md) - 项目概览和设置
