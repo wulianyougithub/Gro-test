@@ -133,6 +133,43 @@ Gro-test/
 6. **Open your browser**
    Navigate to `http://localhost:8001`
 
+### Admin Setup
+
+To enable admin functionality, follow these steps:
+
+1. **Register a User Account**
+   - Navigate to the registration page and create a new user account
+   - Complete the registration process with your email and password
+
+2. **Access Supabase Dashboard**
+   - Go to your Supabase project dashboard
+   - Navigate to the **Table Editor** section
+
+3. **Modify User Admin Status**
+   - Find the `customer` table in the table editor
+   - Locate your user record (you can search by your email)
+   - Click on the `admin` column and change the value from `false` to `true`
+   - Save the changes
+
+4. **Refresh Frontend**
+   - Return to your application frontend
+   - Refresh the page or log out and log back in
+   - You should now see the admin menu with additional functionality
+
+#### Admin Features Available
+
+Once admin privileges are enabled, you'll have access to:
+
+- **Analytics Dashboard**: View comprehensive statistics and charts
+- **Message Management**: Review and approve/reject AI-generated messages
+- **User Management**: View all registered users and manage their admin status
+
+#### Security Note
+
+- Only trusted users should be granted admin privileges
+- Admin status is controlled at the database level for security
+- Consider implementing additional authentication measures for production use
+
 ### Development Workflow
 
 1. **Database Changes**: Create new migrations using `supabase migration new <name>`
