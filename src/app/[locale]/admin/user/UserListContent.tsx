@@ -54,7 +54,6 @@ export default function UserListContent() {
         window.location.reload();
       });
     } catch (error) {
-      console.error('Failed to update admin status:', error);
     } finally {
       setUpdatingId(null);
     }

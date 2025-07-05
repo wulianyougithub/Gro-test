@@ -13,7 +13,6 @@ export function withAdminAuth(handler: (request: Request, ...args: any[]) => Pro
       .select('admin')
       .eq('user_id', user.id)
       .maybeSingle();
-      console.log('校验失败',profile)
     if (!profile?.admin) return NextResponse.json({ error: '无权限' }, { status: 403 });
     // 通过校验，执行原 handler
     return handler(request, ...args);

@@ -11,7 +11,6 @@ export default  function Home() {
   const router = useRouter();
   const pathname = usePathname();
   const [tab, setTab] = useState("login");
-  console.log('666666666',locale)
   const otherLocale = locale === "zh" ? "en" : "zh";
   const handleGoogleLogin = () => {
     // 提示暂未开放

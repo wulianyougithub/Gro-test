@@ -59,10 +59,7 @@ export default function LoginPage() {
     const typeVal = sessionStorage.getItem("ground_auth_type") || "login";
     setEmail(emailVal);
     setType(typeVal);
-    console.log(emailVal, typeVal,sessionStorage);
-    // 清除，避免刷新后残留
-    // sessionStorage.removeItem("ground_auth_email");
-    // sessionStorage.removeItem("ground_auth_type");
+  
     // 如果没有 email，跳回首页
     if (!emailVal) router.replace(`/${locale}`);
   },[]);

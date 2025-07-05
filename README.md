@@ -131,7 +131,7 @@ Gro-test/
    ```
 
 6. **Open your browser**
-   Navigate to `http://localhost:3000`
+   Navigate to `http://localhost:8001`
 
 ### Development Workflow
 

@@ -24,7 +24,6 @@ export const POST = async (request: Request) => {
       status: 'draft' // 默认状态，可根据需要调整
     }
   ]).select().single();
-console.log(error,data)
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

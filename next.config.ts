@@ -12,14 +12,9 @@ export default withNextIntl({
     optimizePackageImports: ['recharts', '@supabase/supabase-js'],
   },
   
-  // 图片优化
-  images: {
-    domains: ['localhost'],
-  },
+
   
   // 压缩配置
   compress: true,
   
-  // 生产环境优化
-  swcMinify: true,
 });

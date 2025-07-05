@@ -127,7 +127,7 @@ Gro-test/
    ```
 
 6. **打开浏览器**
-   访问 `http://localhost:3000`
+   访问 `http://localhost:8001`
 
 ## 开发工作流
 

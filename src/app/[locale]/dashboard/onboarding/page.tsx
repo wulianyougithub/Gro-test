@@ -29,7 +29,6 @@ function Onboarding() {
     async function getCustomer() {
       const { data: { session } } = await supabase.auth.getSession();
       const id = session?.user?.id;
-      console.log(session)
       if (!id) return;
       supabase.from('customer')
         .select('id,name')

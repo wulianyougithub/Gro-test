@@ -22,7 +22,6 @@ export default function AdminMessage() {
   }, []);
 
   const updateStatus = async (id: string, nextStatus: string) => {
-    console.log('hahahah')
     setLoading(true);
     try {
       const response = await fetchWithAuth('/api/admin-messages', {
@@ -40,7 +39,6 @@ export default function AdminMessage() {
         );
       }
     } catch (error) {
-      console.error('Failed to update status:', error);
     } finally {
       setLoading(false);
     }
