@@ -82,7 +82,7 @@ Gro-test/
 - Node.js 18+
 - npm 或 yarn
 - Supabase 账户
-- OpenAI API 密钥
+- DeepSeek API 密钥
 
 ### 安装步骤
 

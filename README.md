@@ -86,7 +86,7 @@ Gro-test/
 - Node.js 18+ 
 - npm or yarn
 - Supabase account
-- OpenAI API key
+- DeepSeek API key
 
 #### Installation
 
