@@ -122,5 +122,14 @@
   "deleteFailed": "删除消息失败",
   "deleteUserConfirm": "确定要删除这个用户吗？这将同时删除所有相关的消息。",
   "deleteUserSuccess": "用户删除成功",
-  "deleteUserFailed": "删除用户失败"
+  "deleteUserFailed": "删除用户失败",
+  "edit": "编辑",
+  "editing": "编辑中...",
+  "save": "保存",
+  "saving": "保存中...",
+  "cancel": "取消",
+  "editMessage": "编辑消息",
+  "editMessagePlaceholder": "请输入消息内容...",
+  "editSuccess": "消息更新成功",
+  "editFailed": "更新消息失败"
 }

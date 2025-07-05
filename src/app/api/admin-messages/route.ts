@@ -44,9 +44,9 @@ export const GET = withAdminAuth(async (request: Request) => {
   const result = customers.map((c: any) => ({
     id: c.id,
     name: c.name,
-    companyName: c.companyName,
+    company_name: c.company_name,
     role: c.role,
-    linkedInUrl: c.linkedInUrl,
+    linkedin_url: c.linkedin_url,
     email: c.email,
     message: c.message?.[0] || null // 只取第一条消息
   }));
@@ -63,8 +63,14 @@ export const GET = withAdminAuth(async (request: Request) => {
 });
 
 export const PATCH = withAdminAuth(async (request: Request) => {
-  const { id, status } = await request.json();
-  const { error } = await supabaseAdmin.from('message').update({ status }).eq('id', id);
+  const { id, status, message } = await request.json();
+  
+  // 构建更新对象
+  const updateData: any = {};
+  if (status !== undefined) updateData.status = status;
+  if (message !== undefined) updateData.message = message;
+  
+  const { error } = await supabaseAdmin.from('message').update(updateData).eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 });

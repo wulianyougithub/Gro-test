@@ -9,6 +9,9 @@ export default function AdminMessage() {
   const [loading, setLoading] = useState(true);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingMessage, setEditingMessage] = useState<string>('');
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -69,7 +72,10 @@ export default function AdminMessage() {
         // 直接更新本地状态，避免重新请求
         setMessages(prevMessages => 
           prevMessages.map(msg => 
-            msg?.message?.id === id ? { ...msg, status: nextStatus } : msg
+            msg?.message?.id === id ? { 
+              ...msg, 
+              message: { ...msg.message, status: nextStatus } 
+            } : msg
           )
         );
       }
@@ -101,7 +107,7 @@ export default function AdminMessage() {
       body: JSON.stringify({
         name: row.name,
         role: row.role,
-        company: row.companyName,
+        company: row.company_name,
         customerId:  row.id
       })
     });
@@ -175,6 +181,50 @@ export default function AdminMessage() {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const handleEditMessage = (messageId: string, currentMessage: string) => {
+    setEditingId(messageId);
+    setEditingMessage(currentMessage);
+  };
+
+  const handleSaveMessage = async () => {
+    if (!editingId) return;
+    
+    setSavingId(editingId);
+    try {
+      const response = await fetchWithAuth('/api/admin-messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          id: editingId, 
+          message: editingMessage 
+        })
+      });
+      
+      if (response && response.ok) {
+        // 刷新当前页面数据
+        fetchMessages(currentPage, filters);
+        setCopyFeedback(t('editSuccess'));
+        setTimeout(() => setCopyFeedback(null), 2000);
+        setEditingId(null);
+        setEditingMessage('');
+      } else {
+        setCopyFeedback(t('editFailed'));
+        setTimeout(() => setCopyFeedback(null), 2000);
+      }
+    } catch (error) {
+      console.error('Failed to update message:', error);
+      setCopyFeedback(t('editFailed'));
+      setTimeout(() => setCopyFeedback(null), 2000);
+    } finally {
+      setSavingId(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditingMessage('');
   };
 
   const Pagination = () => {
@@ -337,7 +387,7 @@ export default function AdminMessage() {
                 <th className="px-4 py-2">{t('messageName')}</th>
                 <th className="px-4 py-2">{t('messageRole')}</th>
                 <th className="px-4 py-2">{t('messageLinkedIn')}</th>
-                <th className="px-4 py-2" style={{ width: '300px' }}>{t('messageContent')}</th>
+                <th className="px-4 py-2" style={{ width: '400px' }}>{t('messageContent')}</th>
                 <th className="px-4 py-2">{t('messageStatus')}</th>
                 <th className="px-4 py-2">{t('messageActions')}</th>
               </tr>
@@ -350,24 +400,52 @@ export default function AdminMessage() {
                   <td className="px-4 py-2">{m.name}</td>
                   <td className="px-4 py-2">{m.role}</td>
                   <td className="px-4 py-2">{m.linkedin_url}</td>
-                  <td className="px-4 py-2" style={{ width: '300px' }}>
+                  <td className="px-4 py-2" style={{ width: '400px' }}>
                     {m.message?.message ? (
-                      <div 
-                        className="group relative cursor-pointer"
-                        onClick={() => handleCopyMessage(m.message.message)}
-                      >
-                        <div className="text-sm leading-relaxed break-words hover:bg-gray-50 p-2 rounded transition-colors">
-                          {m.message.message.length > 80 
-                            ? `${m.message.message.substring(0, 80)}...` 
-                            : m.message.message
-                          }
+                      editingId === m.message.id ? (
+                        <div className="space-y-2">
+                          <textarea
+                            value={editingMessage}
+                            onChange={(e) => setEditingMessage(e.target.value)}
+                            placeholder={t('editMessagePlaceholder')}
+                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            rows={6}
+                            style={{ minHeight: '120px' }}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleSaveMessage}
+                              disabled={savingId === m.message.id}
+                              className="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 disabled:opacity-50 font-medium"
+                            >
+                              {savingId === m.message.id ? t('saving') : t('save')}
+                            </button>
+                            <button
+                              onClick={handleCancelEdit}
+                              className="bg-gray-600 text-white px-4 py-2 text-sm rounded hover:bg-gray-700 font-medium"
+                            >
+                              {t('cancel')}
+                            </button>
+                          </div>
                         </div>
-                        {/* 悬停提示框 */}
-                        <div className="absolute left-0 top-full z-50 hidden group-hover:block bg-gray-900 text-white text-sm rounded-lg p-3 shadow-lg max-w-md whitespace-pre-wrap break-words">
-                          {m.message.message}
-                          <div className="text-xs text-gray-300 mt-2">点击复制</div>
+                      ) : (
+                        <div 
+                          className="group relative cursor-pointer"
+                          onClick={() => handleCopyMessage(m.message.message)}
+                        >
+                          <div className="text-sm leading-relaxed break-words hover:bg-gray-50 p-2 rounded transition-colors">
+                            {m.message.message.length > 80 
+                              ? `${m.message.message.substring(0, 80)}...` 
+                              : m.message.message
+                            }
+                          </div>
+                          {/* 悬停提示框 */}
+                          <div className="absolute left-0 top-full z-50 hidden group-hover:block bg-gray-900 text-white text-sm rounded-lg p-3 shadow-lg max-w-md whitespace-pre-wrap break-words">
+                            {m.message.message}
+                            <div className="text-xs text-gray-300 mt-2">点击复制</div>
+                          </div>
                         </div>
-                      </div>
+                      )
                     ) : (
                       <span className="text-gray-400">-</span>
                     )}
@@ -375,25 +453,29 @@ export default function AdminMessage() {
                   <td className="px-4 py-2">{getLabelStatus(m?.message?.status)}</td>
                   <td className="px-4 py-2" style={{ verticalAlign: 'middle' }}>
                     <div className="flex gap-2">
-                    {m.status !== 'sent' && (
+                    {!m.message && (
+                      <button
+                        className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 disabled:opacity-50"
+                        disabled={loadingId === m.id}
+                        onClick={() => handleGenerate(m)}
+                      >
+                        {loadingId === m.id ? t('messageGenerating') : t('messageGenerate')}
+                      </button>
+                    )}
+                    {m.message && m.message.status !== 'sent' && (
                       <>
-                        {!m.message && (
-                          <button
-                            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 disabled:opacity-50"
-                            disabled={loadingId === m.id}
-                            onClick={() => handleGenerate(m)}
-                          >
-                            {loadingId === m.id ? t('messageGenerating') : t('messageGenerate')}
-                          </button>
-                        )}
-                        {m.message && m.message.status != 'sent' && (
-                          <button
-                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                            onClick={() => updateStatus(m?.message?.id, getNextStatus(m?.message?.status).value)}
-                          >
-                            {getNextStatus(m?.message?.status).label}
-                          </button>
-                        )}
+                        <button
+                          className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                          onClick={() => updateStatus(m?.message?.id, getNextStatus(m?.message?.status).value)}
+                        >
+                          {getNextStatus(m?.message?.status).label}
+                        </button>
+                        <button
+                          className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700"
+                          onClick={() => handleEditMessage(m.message.id, m.message.message)}
+                        >
+                          {t('edit')}
+                        </button>
                       </>
                     )}
                     {m.message && (

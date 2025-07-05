@@ -122,5 +122,14 @@
   "deleteFailed": "Failed to delete message",
   "deleteUserConfirm": "Are you sure you want to delete this user? This will also delete all associated messages.",
   "deleteUserSuccess": "User deleted successfully",
-  "deleteUserFailed": "Failed to delete user"
+  "deleteUserFailed": "Failed to delete user",
+  "edit": "Edit",
+  "editing": "Editing...",
+  "save": "Save",
+  "saving": "Saving...",
+  "cancel": "Cancel",
+  "editMessage": "Edit Message",
+  "editMessagePlaceholder": "Enter your message content...",
+  "editSuccess": "Message updated successfully",
+  "editFailed": "Failed to update message"
 }
