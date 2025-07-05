@@ -10,6 +10,7 @@ export default function AuthCallbackPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [verified,setVerified]=useState<boolean>(false)
 
   useEffect(() => {
     // 解析 hash 参数
@@ -33,7 +34,7 @@ export default function AuthCallbackPage() {
                 .eq('user_id', user.id)
                 .maybeSingle();
               if (profile?.id) {
-                router.replace(`/${locale}/dashboard/wellcome`);
+                router.replace(`/${locale}/dashboard/welcome`);
               } else {
                 // 不存在则插入一条数据（只插入 userId 和 email）
                 const { error: insertError } = await supabase
@@ -42,7 +43,8 @@ export default function AuthCallbackPage() {
                 if (insertError) {
                   setError(insertError.message);
                 } else {
-                  router.replace(`/${locale}/dashboard/wellcome`);
+                  setVerified(true)
+                  // router.replace(`/${locale}/dashboard/welcome`);
                 }
               }
             } else {
@@ -50,7 +52,11 @@ export default function AuthCallbackPage() {
             }
           }
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          sessionStorage.removeItem("ground_auth_email");
+          sessionStorage.removeItem("ground_auth_type");
+          setLoading(false)
+        });
     } else {
       setError("Missing access_token or refresh_token in URL");
       setLoading(false);
@@ -62,6 +68,7 @@ export default function AuthCallbackPage() {
       <div className="flex flex-col justify-center items-center bg-white/60 rounded-lg shadow-lg m-4 md:m-8 p-8 max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4">{t("authCallbackTitle")}</h2>
         {loading && <div className="text-green-600 mb-2">{t("authCallbackLoading")}</div>}
+        {verified && <div className="text-green-600 mb-2">{t("authCallbackSuccess")}</div>}
         {error && <div className="text-red-500 mb-2">{error}</div>}
       </div>
     </div>

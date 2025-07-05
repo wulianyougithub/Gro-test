@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        router.replace(`/${locale}/login`);
+        router.replace(`/${locale}`);
     };
 
     // loading 状态
@@ -70,9 +70,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 </div>
                 <nav className="flex-1 flex flex-col gap-2">
                     <div
-                        className={`text-gray-400 flex items-center gap-2 mb-2 cursor-pointer ${isMenuActive('/dashboard/wellcome') ? 'font-bold text-black' : ''} ${isMenuDisabled('getStarted') ? 'opacity-50 pointer-events-none' : ''}`}
+                        className={`text-gray-400 flex items-center gap-2 mb-2 cursor-pointer ${isMenuActive('/dashboard/welcome') ? 'font-bold text-black' : ''} ${isMenuDisabled('getStarted') ? 'opacity-50 pointer-events-none' : ''}`}
                         onClick={() => {
-                            if (!isMenuDisabled('getStarted')) router.replace(`/${locale}/dashboard/wellcome`)
+                            if (!isMenuDisabled('getStarted')) router.replace(`/${locale}/dashboard/welcome`)
                         }}
                     >
                         {t('dashboardMenuGetStarted')} {isMenuDisabled('businessDetails')?<span>🔒</span>:''}

@@ -33,6 +33,7 @@
   "verifyNotYet": "Not verified yet, please check your email.",
   "authCallbackTitle": "Completing authentication...",
   "authCallbackLoading": "Verifying your email and logging you in...",
+  "authCallbackSuccess": "Success！",
 
   "dashboardWelcome": "Welcome! Let's get started",
   "dashboardIntro": "We just want to get to know you a little better. Answer a couple of questions about your business. Once that's done, you can start your journey to uncover untapped revenue!",

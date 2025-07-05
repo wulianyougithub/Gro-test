@@ -33,6 +33,7 @@
   "verifyNotYet": "尚未完成验证，请检查你的邮箱。",
   "authCallbackTitle": "正在完成认证...",
   "authCallbackLoading": "正在验证邮箱并自动登录...",
+  "authCallbackSuccess": "验证成功",
 
   "dashboardWelcome": "欢迎！让我们开始吧",
   "dashboardIntro": "我们希望更好地了解你。请回答几个关于你业务的问题，完成后你就可以开启挖掘未开发收入的旅程！",

@@ -45,7 +45,7 @@ export default function LoginPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) setFormError(error.message);
-        else router.replace(`/${locale}/dashboard/wellcome`); // 登录成功跳转首页或其他页面
+        else router.replace(`/${locale}/dashboard/welcome`); // 登录成功跳转首页或其他页面
       }
     } catch (err: any) {
       setFormError(err.message || t("unknownError"));

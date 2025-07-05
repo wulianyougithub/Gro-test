@@ -14,13 +14,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         { label: t('adminUserList'), path: `/${locale}/admin/user` },
         { label: t('adminMessageManagement'), path: `/${locale}/admin/message` },
         { label: t('adminAnalysis'), path: `/${locale}/admin/analysis` },
-        { label: t('backHome'), path: `/${locale}/dashboard/wellcome` },
+        { label: t('backHome'), path: `/${locale}/dashboard/welcome` },
     ];
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
         const locale = window.location.pathname.split('/')[1] || 'zh';
-        window.location.href = `/${locale}/login`;
+        window.location.href = `/${locale}`;
     };
 
     return (

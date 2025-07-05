@@ -14,35 +14,54 @@ export default function VerifyPage() {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState("");
 
-  // 自动检测 session 是否存在（已登录）
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.replace(`/${locale}`);
-      }
-    });
-  }, [locale, router]);
+  // 调试信息
+  console.log('Verify page loaded with email:', email);
 
   // 轮询检查邮箱认证状态
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (email) {
-      setChecking(true);
-      interval = setInterval(async () => {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) {
-          setError(error.message);
-          setChecking(false);
-          clearInterval(interval);
-        } else if (user && user.email_confirmed_at) {
-          setVerified(true);
-          setChecking(false);
-          clearInterval(interval);
-          router.replace(`/${locale}`); // 认证后跳转内容页
-        }
-      }, 3000);
-    }
-    return () => clearInterval(interval);
+    
+    // 先检查当前session状态
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user?.email_confirmed_at) {
+        setVerified(true);
+        setChecking(false);
+        router.replace(`/${locale}/dashboard/welcome`); // 修复拼写错误
+        return true; // 已认证，不需要启动定时器
+      }
+      return false; // 需要启动定时器
+    };
+
+    const startPolling = async () => {
+      const isAlreadyVerified = await checkSession();
+      if (isAlreadyVerified) return;
+
+      if (email) {
+        console.log('Starting polling for email:', email);
+        setChecking(true);
+                  interval = setInterval(async () => {
+            console.log('Polling check...');
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error) {
+              console.error('Auth check error:', error);
+            } else if (user && user.email_confirmed_at) {
+            setVerified(true);
+            setChecking(false);
+            clearInterval(interval);
+            router.replace(`/${locale}/dashboard/welcome`); // 修复拼写错误
+          }
+        }, 3000);
+      }
+    };
+
+    startPolling();
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [email, locale, router]);
 
   return (
@@ -63,7 +82,7 @@ export default function VerifyPage() {
             if (error) setError(error.message);
             else if (user && user.email_confirmed_at) {
               setVerified(true);
-              router.replace(`/${locale}`);
+              router.replace(`/${locale}/dashboard/welcome`);
             } else {
               setError(t("verifyNotYet"));
             }
