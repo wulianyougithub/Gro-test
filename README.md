@@ -32,7 +32,7 @@ Ground is an enterprise backend management system built with Next.js and Supabas
 ### Project Structure
 
 ```
-gro-test/
+Gro-test/
 ├── src/
 │   ├── app/
 │   │   ├── [locale]/           # Multi-language routing
@@ -92,8 +92,8 @@ gro-test/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd gro-test
+   git clone https://github.com/wulianyougithub/Gro-test.git
+   cd Gro-test
    ```
 
 2. **Install dependencies**
