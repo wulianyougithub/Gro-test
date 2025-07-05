@@ -118,7 +118,7 @@ Gro-test/
    supabase link --project-ref 你的项目引用
    
    # 应用迁移和种子数据
-   supabase db reset --linked
+   supabase db push --linked
    ```
 
 5. **启动开发服务器**

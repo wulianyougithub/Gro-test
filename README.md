@@ -122,7 +122,7 @@ Gro-test/
    supabase link --project-ref your_project_ref
    
    # Apply migrations and seed data
-   supabase db reset --linked
+   supabase db push --linked
    ```
 
 5. **Start Development Server**
