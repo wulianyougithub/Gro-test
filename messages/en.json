@@ -74,6 +74,7 @@
   "messageLinkedIn": "LinkedIn",
   "messageContent": "Message Content",
   "messageStatus": "Status",
+  "messageStatusCreatedAT": "Created At",
   "messageActions": "Actions",
   "messageGenerate": "Generate Message",
   "messageGenerating": "Generating...",
@@ -131,5 +132,9 @@
   "editMessage": "Edit Message",
   "editMessagePlaceholder": "Enter your message content...",
   "editSuccess": "Message updated successfully",
-  "editFailed": "Failed to update message"
+  "editFailed": "Failed to update message",
+  "exportCSV": "Export CSV",
+  "exporting": "Exporting...",
+  "exportSuccess": "Export successful",
+  "exportFailed": "Export failed"
 }

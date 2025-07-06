@@ -21,8 +21,21 @@ export default function AdminMessage() {
     role: ''
   });
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const locale = useLocale();
   const t = useTranslations();
+
+  // 格式化日期时间函数
+  const formatDateTime = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
 
   const fetchMessages = async (page: number = 1, searchFilters = filters) => {
     setLoading(true);
@@ -227,6 +240,85 @@ export default function AdminMessage() {
     setEditingMessage('');
   };
 
+  // 暂时这么实现，
+  const handleExportCSV = async () => {
+    setExporting(true);
+    try {
+      // 获取所有数据（不分页）
+      const params = new URLSearchParams({
+        limit: '10000' // 设置一个很大的数字来获取所有数据
+      });
+      
+      if (filters.name) {
+        params.append('name', filters.name);
+      }
+      if (filters.role) {
+        params.append('role', filters.role);
+      }
+      
+      const response = await fetchWithAuth(`/api/admin-messages?${params.toString()}`);
+      if (response && response.ok) {
+        const result = await response.json();
+        const allMessages = result.data || [];
+        
+        // 准备CSV数据
+        const csvHeaders = [
+          'Email',
+          'Company',
+          'Name', 
+          'Role',
+          'LinkedIn URL',
+          'Message Content',
+          'Status',
+          'Created At'
+        ];
+        
+        const csvData = allMessages.map((m: any) => [
+          m.email || '',
+          m.company_name || '',
+          m.name || '',
+          m.role || '',
+          m.linkedin_url || '',
+          m.message?.message || '',
+          getLabelStatus(m?.message?.status) || '',
+          m.message?.created_at ? formatDateTime(m.message.created_at) : ''
+        ]);
+        
+        // 创建CSV内容
+        const csvContent = [
+          csvHeaders.join(','),
+          ...csvData.map((row: any[]) => 
+            row.map((cell: any) => 
+              typeof cell === 'string' && cell.includes(',') 
+                ? `"${cell.replace(/"/g, '""')}"` 
+                : cell
+            ).join(',')
+          )
+        ].join('\n');
+        
+        // 创建并下载文件
+        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `messages_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        setCopyFeedback(t('exportSuccess') || '导出成功');
+        setTimeout(() => setCopyFeedback(null), 2000);
+      }
+    } catch (error) {
+      console.error('Failed to export CSV:', error);
+      setCopyFeedback(t('exportFailed') || '导出失败');
+      setTimeout(() => setCopyFeedback(null), 2000);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const Pagination = () => {
     // 调试信息
     console.log('Pagination Debug:', { currentPage, totalPages, total, pageSize });
@@ -371,6 +463,13 @@ export default function AdminMessage() {
             >
               {t('clearFilters')}
             </button>
+            <button
+              onClick={handleExportCSV}
+              disabled={exporting}
+              className="px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {exporting ? (t('exporting') || '导出中...') : (t('exportCSV') || '导出CSV')}
+            </button>
           </div>
         </div>
       </div>
@@ -388,6 +487,7 @@ export default function AdminMessage() {
                 <th className="px-4 py-2">{t('messageRole')}</th>
                 <th className="px-4 py-2">{t('messageLinkedIn')}</th>
                 <th className="px-4 py-2" style={{ width: '400px' }}>{t('messageContent')}</th>
+                <th className="px-4 py-2">{t('messageStatusCreatedAT')}</th>
                 <th className="px-4 py-2">{t('messageStatus')}</th>
                 <th className="px-4 py-2">{t('messageActions')}</th>
               </tr>
@@ -449,8 +549,9 @@ export default function AdminMessage() {
                     ) : (
                       <span className="text-gray-400">-</span>
                     )}
-                  </td>
-                  <td className="px-4 py-2">{getLabelStatus(m?.message?.status)}</td>
+                                      </td>
+                    <td className="px-4 py-2">{m?.message?.created_at ? formatDateTime(m.message.created_at) : '-'}</td>
+                    <td className="px-4 py-2">{getLabelStatus(m?.message?.status)}</td>
                   <td className="px-4 py-2" style={{ verticalAlign: 'middle' }}>
                     <div className="flex gap-2">
                     {!m.message && (

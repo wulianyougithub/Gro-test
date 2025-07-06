@@ -20,7 +20,7 @@ export const GET = withAdminAuth(async (request: Request) => {
       role,
       linkedin_url,
       email,
-      message:message(id, message, status)
+      message:message(id, message, status, created_at)
     `, { count: 'exact' });
 
   // 添加筛选条件

@@ -74,6 +74,7 @@
   "messageLinkedIn": "LinkedIn",
   "messageContent": "消息内容",
   "messageStatus": "状态",
+  "messageStatusCreatedAT": "创建时间",
   "messageActions": "操作",
   "messageGenerate": "生成消息",
   "messageGenerating": "生成中...",
@@ -131,5 +132,9 @@
   "editMessage": "编辑消息",
   "editMessagePlaceholder": "请输入消息内容...",
   "editSuccess": "消息更新成功",
-  "editFailed": "更新消息失败"
+  "editFailed": "更新消息失败",
+  "exportCSV": "导出CSV",
+  "exporting": "导出中...",
+  "exportSuccess": "导出成功",
+  "exportFailed": "导出失败"
 }
