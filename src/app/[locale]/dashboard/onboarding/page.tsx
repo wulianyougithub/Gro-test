@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { withAuthGuard } from "../../withAuthGuard";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 function Onboarding() {
   const [company, setCompany] = useState("");
@@ -128,11 +129,18 @@ function Onboarding() {
         {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
         <button
           type="submit"
-          className="w-full rounded-full py-3 text-lg font-semibold transition"
+          className="w-full rounded-full py-3 text-lg font-semibold transition relative"
           style={{ background: isValid && !loading ? "#000" : "#e5e5e5", color: isValid && !loading ? "#fff" : "#aaa" }}
           disabled={!isValid || loading}
         >
-          {loading ? t('onboardingSubmitting') : t('continue')}
+          {loading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <LoadingSpinner size="sm" text="" />
+              <span>{t('onboardingSubmitting')}</span>
+            </div>
+          ) : (
+            t('continue')
+          )}
         </button>
       </form>
     </div>

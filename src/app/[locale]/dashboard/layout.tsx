@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from "next-intl";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -44,7 +45,19 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     // loading 状态
     if (isAdmin === null) {
-        return <div className="flex-1 flex items-center justify-center text-gray-500">Loading...</div>;
+        return (
+            <div className="min-h-screen flex bg-gradient-to-br from-green-50 to-white">
+                <aside className="w-64 min-h-screen bg-white rounded-r-2xl shadow flex flex-col p-6 gap-6">
+                    <div className="flex items-center gap-2 mb-8">
+                        <Image src="/groundLogoBlack.svg" alt="ground logo" width={32} height={32} />
+                        <span className="text-xl font-bold ml-2">ground</span>
+                    </div>
+                </aside>
+                <main className="flex-1 flex flex-col items-center justify-center">
+                    <LoadingSpinner size="lg" text="正在加载..." />
+                </main>
+            </div>
+        );
     }
 
     // 判断当前菜单是否选中
